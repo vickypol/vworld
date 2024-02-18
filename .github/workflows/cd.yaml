@@ -1,0 +1,21 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the workflow on
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH into EC2 instance and run commands
+      run: |
+        ssh -i "~/Downloads/vworld2.pem" ec2-user@ec2-44-202-13-102.compute-1.amazonaws.com << 'EOF'
+          sudo yum update -y
+          sudo yum install -y docker
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo docker run -d -p 8080:3000 vikypol/vworld:1.0.6
+        EOF
