@@ -1,32 +1,34 @@
-name: unit test
+name: CI/CD Pipeline
+
 on:
   workflow_dispatch:
 
 jobs:
   test:
-    name: unit_test
+    name: Unit Test
     runs-on: ubuntu-latest
 
-   steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-  
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+    
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-    - name: Install Dependencies
-      run: pip install -r requirements.txt
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run Unit Tests
-      run: python -m unittest tests.py
+      - name: Run Unit Tests
+        run: python -m unittest tests.py
 
-    build_and_push:
-      name: Build and Push Docker Image
-      runs-on: ubuntu-latest
-      
-      steps:
+  build_and_push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: test  # This ensures the second job waits for the first job to finish
+    
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
@@ -40,5 +42,5 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
         
-      - name: Push my Docker Image
+      - name: Push Docker Image
         run: docker push vikypol/vworld:1.0.${GITHUB_RUN_NUMBER}
