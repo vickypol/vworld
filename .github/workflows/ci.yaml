@@ -22,7 +22,6 @@ jobs:
     - name: Run Unit Tests
       run: python -m unittest tests.py
 
-jobs:
   build_and_push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
