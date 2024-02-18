@@ -41,5 +41,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
       
-    - name: Push Docker Image
+    - name: Push my Docker Image
       run: docker push vikypol/vworld:1.0.${GITHUB_RUN_NUMBER}
